@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.backend.example
+!agents/.env.example
 
 .pytest_cache/
 __pycache__/
@@ -14,6 +15,10 @@ __pycache__/
 /data/
 /logs/
 /state/
+/agents/logs/
+/agents/state/
+/agents/web/node_modules/
+/agents/web/dist/
 
 /evm/artifacts/
 /evm/cache/

@@ -266,6 +266,25 @@ This gives Entropy Zero a clear separation of concerns:
 - off-chain for computation and market speed
 - on-chain for custody, signatures, and final safety guarantees
 
+## 10. Agent Runtime & xAPI
+This repository also includes the role-based agent runtime under `agents/`.
+
+The agent layer contains:
+- reviewer agents for proposal admission
+- resolver agents for settlement review and veto
+- proposer agents for creating new markets
+- trader agents for probability queries and market participation
+- a live dashboard for trace streaming and operator visibility
+
+The agents use `xAPI` as an external information source:
+- proposer agents use `xAPI` to search X/Twitter and other external signals for market ideas
+- reviewer and resolver agents use `xAPI` to gather evidence when judging proposals and outcomes
+- trader agents can use `xAPI` to enrich market research before querying probabilities or placing trades
+
+In other words, the protocol layer and the agent layer now live in the same public repository:
+- `src/` and `evm/` define the market protocol and security boundary
+- `agents/` defines the autonomous agent runtime that produces, reviews, queries, and acts on market information
+
 ### Setup
 1. Create an environment file from `.env.backend.example`
 2. Install Python dependencies
@@ -289,7 +308,7 @@ To run Python backend tests:
 pytest
 ```
 
-## 9. Why "Entropy Zero"?
+## 11. Why "Entropy Zero"?
 The name comes from the idea of **reducing uncertainty**.
 
 In information theory, entropy measures uncertainty. In the physical world, reducing entropy requires real work and energy expenditure. Entropy Zero applies the same intuition to markets:
@@ -567,6 +586,25 @@ Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议
 - 链下负责计算、撮合与高频市场交互
 - 链上负责托管、签名验证与最终安全保证
 
+## 十、Agent Runtime 与 xAPI
+这个公开仓库现在也包含了位于 `agents/` 目录下的多角色 Agent runtime。
+
+这一层包括：
+- 负责命题审核的 reviewer agents
+- 负责结算审查和 veto 的 resolver agents
+- 负责创建新市场的 proposer agents
+- 负责查询概率和参与交易的 trader agents
+- 用于展示 trace 和运行状态的 live dashboard
+
+这些 Agent 使用 `xAPI` 作为外部信息来源：
+- proposer agents 会通过 `xAPI` 搜索 X/Twitter 等外部信号，用于生成新命题
+- reviewer 与 resolver agents 会通过 `xAPI` 收集外部证据，辅助审核命题和判断结果
+- trader agents 也可以通过 `xAPI` 补充市场研究，再决定是否查询概率或进行交易
+
+换句话说，这个仓库现在同时包含了两层：
+- `src/` 与 `evm/` 定义协议本身以及链下/链上的安全边界
+- `agents/` 定义真正运行的自治 Agent runtime，它们负责生产、审核、查询并消费市场信息
+
 ### 启动说明
 ```bash
 pip install -r requirements.txt
@@ -575,7 +613,7 @@ python -m uvicorn src.main:app --host 127.0.0.1 --port 8000
 ```
 智能合约与后端测试分别使用 `npx hardhat test` 和 `pytest` 运行。
 
-## 九、为什么叫 Entropy Zero？
+## 十一、为什么叫 Entropy Zero？
 这个名字来自一个很直观的理念：**降低不确定性**。
 
 在信息论里，熵代表不确定性；在物理世界里，降低熵需要真实的做功和能量消耗。Entropy Zero 想表达的正是这件事：

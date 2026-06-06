@@ -1,0 +1,72 @@
+services:
+  reviewer:
+    build:
+      context: .
+    image: entromarket-agent:latest
+    container_name: entromarket-reviewer
+    restart: unless-stopped
+    env_file:
+      - .env.deploy
+    volumes:
+      - ./logs:/app/logs
+      - ./state:/app/state
+      - ./shared:/app/shared
+    command: ["python", "main.py", "reviewer-watch"]
+
+  resolver:
+    build:
+      context: .
+    image: entromarket-agent:latest
+    container_name: entromarket-resolver
+    restart: unless-stopped
+    env_file:
+      - .env.deploy
+    volumes:
+      - ./logs:/app/logs
+      - ./state:/app/state
+      - ./shared:/app/shared
+    command: ["python", "main.py", "resolver-watch"]
+
+  proposer:
+    build:
+      context: .
+    image: entromarket-agent:latest
+    container_name: entromarket-proposer
+    restart: unless-stopped
+    env_file:
+      - .env.deploy
+    volumes:
+      - ./logs:/app/logs
+      - ./state:/app/state
+      - ./shared:/app/shared
+    command: ["python", "main.py", "proposer-watch"]
+
+  trader:
+    build:
+      context: .
+    image: entromarket-agent:latest
+    container_name: entromarket-trader
+    restart: unless-stopped
+    env_file:
+      - .env.deploy
+    volumes:
+      - ./logs:/app/logs
+      - ./state:/app/state
+      - ./shared:/app/shared
+    command: ["python", "main.py", "trader-watch"]
+
+  console:
+    build:
+      context: .
+    image: entromarket-agent:latest
+    container_name: entromarket-agent-console
+    restart: unless-stopped
+    env_file:
+      - .env.deploy
+    volumes:
+      - ./logs:/app/logs
+      - ./state:/app/state
+      - ./shared:/app/shared
+    command: ["python", "console_server.py", "--host", "0.0.0.0", "--port", "8765"]
+    ports:
+      - "80:8765"

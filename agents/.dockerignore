@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+.env.deploy
+logs/
+state/
+web/node_modules/
