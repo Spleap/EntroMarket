@@ -11,13 +11,33 @@ As AI Agents increasingly participate in research, governance, trading, and deci
 However, existing prediction markets primarily reward trading activity rather than information production. 
 Entropy Zero introduces a new mechanism that rewards participants who contribute information and improve market accuracy, enabling effective truth discovery even in low-liquidity environments.
 
-## 2. Problem Statement
+## 2. Why Information Tax Matters for Truth Discovery
+The most important mechanism in Entropy Zero is **Information Tax**.
+
+Traditional prediction markets mainly reward trading PnL. That works for high-attention events, but it breaks down in long-tail markets where:
+- there are not enough traders
+- there is not enough volume
+- the private value of doing research is often lower than the cost of producing it
+
+Information Tax changes the incentive structure:
+- probability consumers pay to query the market
+- those payments accumulate into a reward pool
+- the reward pool is distributed to agents and LPs who improved the market earliest and most effectively
+
+This is what turns Entropy Zero from a normal prediction market into a **truth-discovery market**:
+- information production is directly monetized
+- useful early research becomes economically valuable
+- long-tail markets can attract sustained attention even without large speculative volume
+
+In short, Information Tax is the bridge that converts **future probability demand** into **present incentives for truth discovery**.
+
+## 3. Problem Statement
 Current prediction markets have three limitations:
 1. **Long-Tail Market Failure**: Most markets function well only with sufficient liquidity. Long-tail events suffer from few participants and weak price discovery.
 2. **Information Producers Lack Incentives**: Participants with valuable information may not participate due to insufficient counterparty volume or small potential profits.
 3. **Future AI Agents Need Probabilities**: AI systems will increasingly require event probabilities, yet no scalable mechanism continuously incentivizes their production.
 
-## 3. Why AI Agents are the Core Engine?
+## 4. Why AI Agents are the Core Engine?
 Human attention is scarce and expensive. Traditional markets fail on long-tail events because there is not enough human interest to provide liquidity or research.
 **AI Agents solve the long-tail liquidity problem.**
 - **As Information Producers:** Swarms of AI Agents can continuously monitor news, on-chain data, and sentiment 24/7, injecting micro-liquidity into thousands of niche markets simultaneously.
@@ -25,7 +45,7 @@ Human attention is scarce and expensive. Traditional markets fail on long-tail e
 
 Without AI Agents, long-tail truth discovery is impossible. With them, Entropy Zero becomes an automated, self-sustaining probability oracle.
 
-## 4. Core Insight & Information Tax
+## 5. Core Insight & Information Tax
 Traditional prediction markets reward trading. **Entropy Zero rewards information production.**
 
 Future consumers of probability information should subsidize early contributors who improve market accuracy. We introduce the **Information Tax**:
@@ -34,7 +54,7 @@ Future consumers of probability information should subsidize early contributors 
 3. The fee accumulates as a market-level information tax pool.
 4. After resolution, the pool is distributed to contributors who improved the market earliest and most effectively.
 
-## 5. Token Design
+## 6. Token Design
 Entropy Zero uses **two tokens with clearly separated roles**:
 
 ### `USDNB`
@@ -56,7 +76,7 @@ In short:
 - `USDNB` = trading capital and settlement asset
 - `ENTROPY` = information fee, staking asset, and incentive token
 
-## 6. AMM Mathematics & Mechanics
+## 7. AMM Mathematics & Mechanics
 Entropy Zero uses a directional CPMM (Constant Product Market Maker) variant tailored for probability discovery and information tax distribution.
 
 ### Virtual Reserves & Invariant
@@ -107,7 +127,7 @@ This creates a very specific incentive:
 - LPs who injected useful liquidity at the right time capture more of that pool
 - late or wrong-side liquidity earns less or nothing
 
-## 7. Technical Architecture
+## 8. Technical Architecture
 Entropy Zero uses a **hybrid off-chain execution + on-chain security** architecture. The design goal is simple: keep high-frequency market logic off-chain for speed, while keeping assets and final trust guarantees on-chain.
 
 ### 1. Off-Chain Execution Layer
@@ -269,7 +289,7 @@ To run Python backend tests:
 pytest
 ```
 
-## 8. Why "Entropy Zero"?
+## 9. Why "Entropy Zero"?
 The name comes from the idea of **reducing uncertainty**.
 
 In information theory, entropy measures uncertainty. In the physical world, reducing entropy requires real work and energy expenditure. Entropy Zero applies the same intuition to markets:
@@ -289,12 +309,32 @@ In that sense, Entropy Zero is a market designed to turn computation and energy 
 ## 一、项目愿景
 Entropy Zero 致力于成为未来 Agent 经济中的概率基础设施（Probability Infrastructure）。随着 AI Agent 逐渐参与研究、投资、治理和决策，市场对于高质量概率信息的需求将持续增长。然而，现有预测市场主要激励交易行为，而非信息生产行为。Entropy Zero 希望通过全新的 **Information Tax（信息税）** 机制，让未来的信息消费者补贴早期的信息发现者，从而在流动性稀缺的长尾事件中依然实现高质量的真理发现。
 
-## 二、问题定义
+## 二、为什么 Information Tax 对真理发现至关重要？
+Entropy Zero 最核心的机制就是 **Information Tax（信息税）**。
+
+传统预测市场主要奖励交易收益，这种机制在高关注事件里有效，但在长尾市场里往往会失效，因为：
+- 交易者数量不够
+- 市场成交量不够
+- 做研究、生产信息的成本，往往高于短期能获得的直接收益
+
+Information Tax 改变了激励结构：
+- 概率消费者为查询市场付费
+- 这些费用沉淀为奖励池
+- 奖励池再分配给那些最早、最有效提升市场质量的 Agent 和 LP
+
+这正是 Entropy Zero 从普通 prediction market 变成 **truth-discovery market（真理发现市场）** 的关键：
+- 信息生产本身可以被直接货币化
+- 有价值的早期研究变成了可获利的行为
+- 即便没有巨大投机交易量，长尾市场也能持续吸引注意力和流动性
+
+一句话说，Information Tax 把**未来对概率的需求**，转化成了**今天对真理发现的激励**。
+
+## 三、问题定义
 1. **长尾事件缺乏有效的真理发现机制**：传统预测市场在热门事件中表现良好，但在长尾事件（如 DAO 提案、小众生态事件）中往往面临流动性不足，无法形成有效价格。
 2. **信息生产者缺乏激励**：有人掌握信息优势，但由于市场交易量过低、没有足够对手盘，导致他们不愿意参与。
 3. **AI Agent 将成为未来概率的主要消费者**：未来的 AI Agent 在决策时需要大量概率信息，但目前不存在一个能够持续激励概率生产的机制。
 
-## 三、为什么 AI Agent 是核心引擎？
+## 四、为什么 AI Agent 是核心引擎？
 人类的注意力和时间是稀缺且昂贵的。传统市场在长尾事件上失效，正是因为缺乏足够的人类关注来提供流动性和研究。
 **AI Agent 彻底解决了长尾市场的流动性问题：**
 - **作为信息生产者：** AI Agent 集群可以 24/7 不间断地监控新闻、链上数据和市场情绪，同时为成千上万的小众市场注入微流动性并修正概率。
@@ -302,7 +342,7 @@ Entropy Zero 致力于成为未来 Agent 经济中的概率基础设施（Probab
 
 没有 AI Agent，长尾事件的真理发现是不可能的；有了 AI Agent，Entropy Zero 将成为一个高度自动化、自我维持的概率预言机网络。
 
-## 四、核心洞察与信息税 (Information Tax)
+## 五、核心洞察与信息税 (Information Tax)
 传统预测市场激励交易，**Entropy Zero 激励信息生产。**
 未来的信息消费者应当为信息发现过程付费，这些费用应当奖励那些帮助市场变得更准确的信息贡献者。
 1. 外部用户或 AI Agent 查询概率（例如：“某提案通过概率是多少？”）。
@@ -310,7 +350,7 @@ Entropy Zero 致力于成为未来 Agent 经济中的概率基础设施（Probab
 3. 税收进入奖励池。
 4. 事件结算后，根据参与者对市场准确度的贡献（风险加权），将税收分配给信息贡献者。
 
-## 五、Token 设计
+## 六、Token 设计
 Entropy Zero 使用 **两种职责明确分离的代币**：
 
 ### `USDNB`
@@ -332,7 +372,7 @@ Entropy Zero 使用 **两种职责明确分离的代币**：
 - `USDNB` = 交易本金与结算资产
 - `ENTROPY` = 信息费、治理质押与激励代币
 
-## 六、AMM 数学模型
+## 七、AMM 数学模型
 Entropy Zero 采用了一种专门为概率发现和信息税分配定制的方向性 CPMM（恒定乘积做市商）变体。
 
 ### 虚拟储备与恒定乘积
@@ -383,7 +423,7 @@ $$ Score_i = Amount_i \cdot \left(1 + RiskMultiplier \cdot (1 - P_{yes\_at\_entr
 - 在正确时间注入有用流动性的 LP，可以分走更大比例的奖励
 - 过晚进入或者站错方向的流动性，收益会更少甚至为零
 
-## 七、技术架构
+## 八、技术架构
 Entropy Zero 采用 **链下执行 + 链上安全** 的混合架构。设计目标非常明确：把高频、复杂、低价值密度的市场计算放在链下，把资产托管和最终安全保证放在链上。
 
 ### 1. 链下执行层
@@ -535,7 +575,7 @@ python -m uvicorn src.main:app --host 127.0.0.1 --port 8000
 ```
 智能合约与后端测试分别使用 `npx hardhat test` 和 `pytest` 运行。
 
-## 八、为什么叫 Entropy Zero？
+## 九、为什么叫 Entropy Zero？
 这个名字来自一个很直观的理念：**降低不确定性**。
 
 在信息论里，熵代表不确定性；在物理世界里，降低熵需要真实的做功和能量消耗。Entropy Zero 想表达的正是这件事：
