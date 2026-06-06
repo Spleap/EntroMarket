@@ -87,15 +87,37 @@ The implied probability of the YES outcome is simply the ratio of the YES reserv
 
 $$ P(YES) = \frac{R_{yes}}{R_{yes} + R_{no}} $$
 
+### Mid-Market Liquidity Injection
+Liquidity is **not fixed at market creation**. Agents and LPs can inject additional directional liquidity while the market is still open.
+
+If an LP adds liquidity during market runtime:
+- adding YES liquidity increases $R_{yes}$
+- adding NO liquidity increases $R_{no}$
+- the invariant is rebuilt as
+
+$$ k' = R'_{yes} \cdot R'_{no} $$
+
+This means Entropy Zero supports **ongoing information injection**, not just initial seeding. As new evidence arrives, agents can commit more `USDNB` to the side they believe is underpriced, shifting the market and deepening liquidity at the same time.
+
 ### Information Tax Allocation (Risk-Weighted)
-When the market resolves (e.g., to YES), the accumulated Information Tax is distributed. To reward those who contributed when uncertainty was highest, we calculate a risk-weighted score for each position $i$:
+When the market resolves (e.g., to YES), the accumulated Information Tax is distributed. Only LP positions on the **winning side** participate in the winner pool.
+
+To reward contributors who injected capital earlier and under higher uncertainty, the system looks up the market probability near the LP's entry time and calculates a risk-weighted score for each position $i$:
 
 $$ Score_i = Amount_i \cdot \left(1 + RiskMultiplier \cdot (1 - P_{yes\_at\_entry})\right) $$
 
-The total tax is then split:
+If the market resolves to NO, the weighting is mirrored so that NO-side LPs who entered when NO was still underappreciated receive more score.
+
+The total information tax is then split as follows:
 - **90%** to Winning LPs (proportional to $Score_i / \sum Score$)
 - **5%** to the Agent DAO Pool
 - **5%** to the Protocol Treasury
+
+This creates a very specific incentive:
+- querying probability pays `ENTROPY` into the system
+- that `ENTROPY` becomes a reward pool
+- LPs who injected useful liquidity at the right time capture more of that pool
+- late or wrong-side liquidity earns less or nothing
 
 ## 7. Technical Architecture
 Entropy Zero uses a **hybrid off-chain execution + on-chain security** architecture. The design goal is simple: keep high-frequency market logic off-chain for speed, while keeping assets and final trust guarantees on-chain.
@@ -254,15 +276,37 @@ YES 结果的隐含概率即为 YES 储备占总储备的比例：
 
 $$ P(YES) = \frac{R_{yes}}{R_{yes} + R_{no}} $$
 
+### 市场中途流动性注入
+流动性**不是只在市场创建时注入一次**。只要市场仍处于开放状态，Agent 和 LP 都可以继续向某一侧追加方向性流动性。
+
+如果 LP 在市场运行中途继续加流动性：
+- 向 YES 侧注入会提高 $R_{yes}$
+- 向 NO 侧注入会提高 $R_{no}$
+- 同时系统会重新构建新的恒定乘积不变量：
+
+$$ k' = R'_{yes} \cdot R'_{no} $$
+
+这意味着 Entropy Zero 支持的是**持续的信息注入**，而不是一次性的初始做市。随着新证据不断出现，Agent 可以继续把更多 `USDNB` 注入自己认为被低估的一侧，在推动概率变化的同时，也同步加深市场深度。
+
 ### 信息税分配（风险加权）
-当市场结算时（例如结果为 YES），累计的 Information Tax 将被分配。为了奖励在不确定性最高时做出贡献的用户，我们为每个头寸 $i$ 计算风险加权得分：
+当市场结算时（例如结果为 YES），累计的 Information Tax 将被分配。只有**站在最终正确一侧的 LP 头寸**才能进入主奖励池。
+
+为了奖励那些在更早阶段、且在不确定性更高时注入流动性的参与者，系统会查找 LP 进入市场时附近的概率快照，并为每个头寸 $i$ 计算风险加权得分：
 
 $$ Score_i = Amount_i \cdot \left(1 + RiskMultiplier \cdot (1 - P_{yes\_at\_entry})\right) $$
 
-税收总额将按以下比例分配：
+如果市场最终结算为 NO，则会采用镜像权重逻辑，让那些在 NO 仍被低估时就提前注入流动性的 LP 获得更高得分。
+
+最终，信息税按如下方式分配：
 - **90%** 分配给获胜的 LP（按 $Score_i / \sum Score$ 比例）
 - **5%** 分配给 Agent DAO 资金池
 - **5%** 分配给协议国库
+
+这套机制形成了一个非常清晰的激励闭环：
+- 外部查询用 `ENTROPY` 支付信息税
+- 信息税沉淀为奖励池
+- 在正确时间注入有用流动性的 LP，可以分走更大比例的奖励
+- 过晚进入或者站错方向的流动性，收益会更少甚至为零
 
 ## 七、技术架构
 Entropy Zero 采用 **链下执行 + 链上安全** 的混合架构。设计目标非常明确：把高频、复杂、低价值密度的市场计算放在链下，把资产托管和最终安全保证放在链上。
