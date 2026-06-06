@@ -5,18 +5,6 @@
 
 ---
 
-## Why "Entropy Zero"?
-The name comes from the idea of **reducing uncertainty**.
-
-In information theory, entropy measures uncertainty. In the physical world, reducing entropy requires real work and energy expenditure. Entropy Zero applies the same intuition to markets:
-- agents spend computation, attention, and economic resources to research events
-- the system converts that work into better probabilities
-- each update pushes the market from uncertainty toward clearer truth
-
-In that sense, Entropy Zero is a market designed to turn computation and energy into lower information entropy.
-
----
-
 ## 1. Vision
 Entropy Zero aims to become the probability infrastructure for the future Agent Economy. 
 As AI Agents increasingly participate in research, governance, trading, and decision-making, the demand for reliable probability estimates will grow dramatically. 
@@ -193,23 +181,22 @@ To run Python backend tests:
 pytest
 ```
 
+## 8. Why "Entropy Zero"?
+The name comes from the idea of **reducing uncertainty**.
+
+In information theory, entropy measures uncertainty. In the physical world, reducing entropy requires real work and energy expenditure. Entropy Zero applies the same intuition to markets:
+- agents spend computation, attention, and economic resources to research events
+- the system converts that work into better probabilities
+- each update pushes the market from uncertainty toward clearer truth
+
+In that sense, Entropy Zero is a market designed to turn computation and energy into lower information entropy.
+
 ---
 ---
 
 # Entropy Zero (中文版)
 
 **AI Agent 驱动的长尾事件真理发现市场**
-
-## 为什么叫 Entropy Zero？
-这个名字来自一个很直观的理念：**降低不确定性**。
-
-在信息论里，熵代表不确定性；在物理世界里，降低熵需要真实的做功和能量消耗。Entropy Zero 想表达的正是这件事：
-- Agent 通过计算、搜索、推理和资金投入去研究事件
-- 系统把这些“做功”转化为更好的概率估计
-- 每一次查询、交易、审核和更新，都在把市场从更高的不确定性推向更低的不确定性
-
-所以，Entropy Zero 的含义就是：
-**通过计算与能量消耗，持续降低信息的不确定性。**
 
 ## 一、项目愿景
 Entropy Zero 致力于成为未来 Agent 经济中的概率基础设施（Probability Infrastructure）。随着 AI Agent 逐渐参与研究、投资、治理和决策，市场对于高质量概率信息的需求将持续增长。然而，现有预测市场主要激励交易行为，而非信息生产行为。Entropy Zero 希望通过全新的 **Information Tax（信息税）** 机制，让未来的信息消费者补贴早期的信息发现者，从而在流动性稀缺的长尾事件中依然实现高质量的真理发现。
@@ -371,6 +358,17 @@ cp .env.backend.example .env.backend
 python -m uvicorn src.main:app --host 127.0.0.1 --port 8000
 ```
 智能合约与后端测试分别使用 `npx hardhat test` 和 `pytest` 运行。
+
+## 八、为什么叫 Entropy Zero？
+这个名字来自一个很直观的理念：**降低不确定性**。
+
+在信息论里，熵代表不确定性；在物理世界里，降低熵需要真实的做功和能量消耗。Entropy Zero 想表达的正是这件事：
+- Agent 通过计算、搜索、推理和资金投入去研究事件
+- 系统把这些“做功”转化为更好的概率估计
+- 每一次查询、交易、审核和更新，都在把市场从更高的不确定性推向更低的不确定性
+
+所以，Entropy Zero 的含义就是：
+**通过计算与能量消耗，持续降低信息的不确定性。**
 
 ## License
 MIT
