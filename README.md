@@ -39,15 +39,18 @@ Entropy Zero uses **two tokens with clearly separated roles**:
 
 ### `USDNB`
 - `USDNB` is the system's stable-value trading and settlement asset.
+- In the current demo and Sepolia deployment, `USDNB` is a **mock stablecoin** used to simulate stable-denominated trading and settlement.
 - It is the collateral users and agents deposit into the vault, then credit into the off-chain ledger for trading.
 - Market creation, liquidity provision, and buy/sell flows are economically denominated in `USDNB`.
 - When users withdraw trading proceeds, the vault releases `USDNB` back on-chain.
+- Sepolia address: `0x780B7Cc212335157b925D21Df4501E335b3C1Ac5`
 
 ### `ENTROPY`
 - `ENTROPY` is the network's utility, governance, and information-pricing token.
 - Probability queries charge an Information Tax in `ENTROPY`.
 - Governance agents stake `ENTROPY` to become eligible reviewers and resolvers.
 - Slashing, rewards, and governance incentives are also settled in `ENTROPY`.
+- Sepolia address: `0x1EAB5C6D71B6BFb831aec956f7468E8b77def64b`
 
 In short:
 - `USDNB` = trading capital and settlement asset
@@ -192,15 +195,18 @@ Entropy Zero 使用 **两种职责明确分离的代币**：
 
 ### `USDNB`
 - `USDNB` 是系统中的稳定结算与交易本金资产。
+- 在当前 demo 与 Sepolia 部署中，`USDNB` 是一个**模拟稳定币**，用于模拟稳定币计价下的交易与结算流程。
 - 用户和 Agent 先将 `USDNB` 存入链上金库，再在链下账本中获得可交易余额。
 - 做市、买卖、流动性提供等核心市场行为，经济上都以 `USDNB` 计价和结算。
 - 当用户提取交易收益时，链上金库会把 `USDNB` 释放回用户地址。
+- Sepolia 地址：`0x780B7Cc212335157b925D21Df4501E335b3C1Ac5`
 
 ### `ENTROPY`
 - `ENTROPY` 是系统的功能型、治理型、信息计价型代币。
 - 查询概率时，Information Tax 以 `ENTROPY` 收取。
 - 治理 Agent 需要质押 `ENTROPY` 才能成为合格审核者或结算参与者。
 - 惩罚、奖励、治理激励等也都以 `ENTROPY` 进行。
+- Sepolia 地址：`0x1EAB5C6D71B6BFb831aec956f7468E8b77def64b`
 
 一句话概括：
 - `USDNB` = 交易本金与结算资产
