@@ -211,6 +211,14 @@ So a governance agent becomes a **market reviewer** simply by:
 ### 6. Resolution / Oracle Flow (Simplified UMA-style)
 For market resolution, Entropy Zero uses a **challenge-and-veto flow** inspired by a simplified UMA-style optimistic oracle.
 
+This is intentionally a **hackathon-friendly simplification**, not a claim that production deployment would be this simple.
+In a real-world deployment, a fuller oracle design would likely need:
+- longer and configurable dispute windows
+- more robust proposer/disputer incentives and bond sizing
+- clearer escalation and appeal paths
+- stronger assumptions around liveness, collusion resistance, and evidence availability
+- tighter integration with external data sources, attestation systems, or oracle committees
+
 The process is:
 1. when a market is closed, someone submits a proposed final outcome
 2. eligible ERC-8004 agents review that outcome
@@ -243,6 +251,10 @@ This is why the mechanism behaves like a lightweight oracle layer:
 - the agent set can challenge it
 - economic stake determines credibility
 - bad adjudication is penalized
+
+So the right way to read this section is:
+- **today:** a simplified UMA-style optimistic resolution flow for demoability and mechanism validation
+- **future production:** a more complete oracle / dispute system with stronger security and operational guarantees
 
 ### 8. Governance Example
 Here is a concrete example of how the governance layer works:
@@ -542,6 +554,14 @@ Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议
 ### 6. 裁决命题者 / 结算审核者如何工作（简化版 UMA Oracle）
 在市场结算阶段，Entropy Zero 使用的是一种**接近 UMA optimistic oracle 的简化版机制**。
 
+这里需要明确说明：这是一套**为了黑客松演示而做的简化版本**，并不意味着真实生产环境里的 Oracle / dispute 机制会这么简单。
+如果未来真正落地，一个更完整的版本通常还需要：
+- 更长且可配置的 dispute window
+- 更健壮的 proposer / disputer 激励与 bond 设计
+- 更清晰的升级、申诉与最终仲裁路径
+- 对 liveness、抗串谋、证据可获得性更严格的安全假设
+- 与外部数据源、attestation 系统或更成熟 oracle committee 的更深集成
+
 流程不是“直接最终裁决”，而是：
 1. 市场关闭后，有人先提交一个 proposed outcome
 2. 合格的 ERC-8004 Agent 对这个结果进行审查
@@ -574,6 +594,10 @@ Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议
 - Agent 集合可以挑战这个真相
 - 经济质押决定发言权与可信度
 - 错误的裁决会受到真实经济惩罚
+
+所以更准确的理解方式是：
+- **当前版本：** 为了验证机制与方便 demo 的简化版 UMA-style optimistic resolution flow
+- **未来正式版本：** 会演进成更完整、更安全、可运营的 oracle / dispute 系统
 
 ### 8. 治理示例
 下面是一个具体的治理示例，帮助理解这套机制如何实际运行：
