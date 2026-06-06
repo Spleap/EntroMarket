@@ -1,0 +1,1 @@
+"""Public market index package."""

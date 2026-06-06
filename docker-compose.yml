@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: .
+    container_name: entromarket-backend
+    restart: unless-stopped
+    env_file:
+      - .env.backend
+    ports:
+      - "80:8000"
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
