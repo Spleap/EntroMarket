@@ -29,12 +29,31 @@ Without AI Agents, long-tail truth discovery is impossible. With them, Entropy Z
 Traditional prediction markets reward trading. **Entropy Zero rewards information production.**
 
 Future consumers of probability information should subsidize early contributors who improve market accuracy. We introduce the **Information Tax**:
-1. External users or AI Agents query probabilities via API (e.g., "What is the probability of Proposal X passing?").
-2. The query is charged an Information Tax in `ENTROPY` tokens.
-3. Tax revenue enters a reward pool.
-4. After market resolution, the pool is distributed to early liquidity providers and predictors based on their contribution to probability accuracy (risk-weighted).
+1. External users or AI Agents query probabilities via API.
+2. Each query is charged in `ENTROPY`.
+3. The fee accumulates as a market-level information tax pool.
+4. After resolution, the pool is distributed to contributors who improved the market earliest and most effectively.
 
-## 5. AMM Mathematics & Mechanics
+## 5. Token Design
+Entropy Zero uses **two tokens with clearly separated roles**:
+
+### `USDNB`
+- `USDNB` is the system's stable-value trading and settlement asset.
+- It is the collateral users and agents deposit into the vault, then credit into the off-chain ledger for trading.
+- Market creation, liquidity provision, and buy/sell flows are economically denominated in `USDNB`.
+- When users withdraw trading proceeds, the vault releases `USDNB` back on-chain.
+
+### `ENTROPY`
+- `ENTROPY` is the network's utility, governance, and information-pricing token.
+- Probability queries charge an Information Tax in `ENTROPY`.
+- Governance agents stake `ENTROPY` to become eligible reviewers and resolvers.
+- Slashing, rewards, and governance incentives are also settled in `ENTROPY`.
+
+In short:
+- `USDNB` = trading capital and settlement asset
+- `ENTROPY` = information fee, staking asset, and incentive token
+
+## 6. AMM Mathematics & Mechanics
 Entropy Zero uses a directional CPMM (Constant Product Market Maker) variant tailored for probability discovery and information tax distribution.
 
 ### Virtual Reserves & Invariant
@@ -63,17 +82,56 @@ The total tax is then split:
 - **5%** to the Agent DAO Pool
 - **5%** to the Protocol Treasury
 
-## 6. Technical Architecture & Local Development
-Entropy Zero uses a hybrid Mock TEE architecture to balance performance, scalability, and security:
+## 7. Technical Architecture
+Entropy Zero uses a **hybrid off-chain execution + on-chain security** architecture. The design goal is simple: keep high-frequency market logic off-chain for speed, while keeping assets and final trust guarantees on-chain.
 
-### 1. Off-Chain TEE Computation
-The core AMM matching, probability queries, information tax calculation, and order flows run inside an off-chain Trusted Execution Environment (TEE). This ensures high-performance, zero-gas execution while maintaining cryptographically verifiable state transitions.
+### 1. Off-Chain Execution Layer
+The off-chain backend under `src/` acts as the mock TEE runtime.
 
-### 2. On-Chain Vault & Security
-EVM Smart contracts (`evm/`) serve as the ultimate trust anchor. They handle pure fund custody, token deposits/withdrawals, and cryptographic attestation verification. The on-chain vault guarantees absolute asset security without bottlenecking trading speed.
+It is responsible for:
+- maintaining the internal ledger for `USDNB` and `ENTROPY`
+- running the AMM pricing engine and market state transitions
+- processing market creation, trading, liquidity, and probability query flows
+- charging Information Tax in `ENTROPY`
+- producing state snapshots and Merkle roots for later verification
 
-### 3. ERC-8004 Agent Integration
-AI Agents are natively represented using the **ERC-8004** standard. This allows agents to be tokenized, stake assets, build verifiable on-chain reputation, and directly participate in the DAO governance and market resolution process as autonomous economic nodes.
+This layer is where fast market iteration happens. It avoids putting every trade and query directly on-chain, which would be too slow and too expensive for long-tail markets.
+
+### 2. On-Chain Security Layer
+The contracts in `evm/` are the system's trust anchor.
+
+The vault contract holds the actual on-chain assets:
+- `USDNB` for deposits, trading collateral, and withdrawals
+- `ENTROPY` for query-fee funding and utility-token custody
+
+The vault also accepts signed state-root submissions from the operator and verifies signed withdrawal intents before releasing funds. In practice, this means:
+- market execution happens off-chain
+- asset custody remains on-chain
+- users can audit the published state commitment
+
+### 3. ERC-8004 Agent Governance Layer
+Entropy Zero treats AI agents as first-class economic actors instead of UI bots.
+
+Using the **ERC-8004 agent identity model**, agents can:
+- bind an agent identity to a controller account
+- stake `ENTROPY` to become governance-eligible
+- participate in proposal review and veto flows
+- be rewarded or slashed based on governance behavior
+
+This is critical to the protocol design: agents are not just users of probabilities, they are also producers, reviewers, and security participants.
+
+### 4. End-to-End Asset Flow
+The full flow is:
+1. A user or agent deposits `USDNB` or `ENTROPY` into the on-chain vault.
+2. The operator credits the corresponding balance inside the off-chain ledger.
+3. Trading and market operations happen inside the off-chain execution layer.
+4. Probability queries consume `ENTROPY` as Information Tax.
+5. The backend periodically publishes signed state roots.
+6. Withdrawals are executed from the vault against operator-signed withdrawal messages.
+
+This gives Entropy Zero a clear separation of concerns:
+- off-chain for computation and market speed
+- on-chain for custody, signatures, and final safety guarantees
 
 ### Setup
 1. Create an environment file from `.env.backend.example`
@@ -129,7 +187,26 @@ Entropy Zero 致力于成为未来 Agent 经济中的概率基础设施（Probab
 3. 税收进入奖励池。
 4. 事件结算后，根据参与者对市场准确度的贡献（风险加权），将税收分配给信息贡献者。
 
-## 五、AMM 数学模型
+## 五、Token 设计
+Entropy Zero 使用 **两种职责明确分离的代币**：
+
+### `USDNB`
+- `USDNB` 是系统中的稳定结算与交易本金资产。
+- 用户和 Agent 先将 `USDNB` 存入链上金库，再在链下账本中获得可交易余额。
+- 做市、买卖、流动性提供等核心市场行为，经济上都以 `USDNB` 计价和结算。
+- 当用户提取交易收益时，链上金库会把 `USDNB` 释放回用户地址。
+
+### `ENTROPY`
+- `ENTROPY` 是系统的功能型、治理型、信息计价型代币。
+- 查询概率时，Information Tax 以 `ENTROPY` 收取。
+- 治理 Agent 需要质押 `ENTROPY` 才能成为合格审核者或结算参与者。
+- 惩罚、奖励、治理激励等也都以 `ENTROPY` 进行。
+
+一句话概括：
+- `USDNB` = 交易本金与结算资产
+- `ENTROPY` = 信息费、治理质押与激励代币
+
+## 六、AMM 数学模型
 Entropy Zero 采用了一种专门为概率发现和信息税分配定制的方向性 CPMM（恒定乘积做市商）变体。
 
 ### 虚拟储备与恒定乘积
@@ -158,17 +235,61 @@ $$ Score_i = Amount_i \cdot \left(1 + RiskMultiplier \cdot (1 - P_{yes\_at\_entr
 - **5%** 分配给 Agent DAO 资金池
 - **5%** 分配给协议国库
 
-## 六、技术架构与本地开发
-Entropy Zero 采用混合 Mock TEE 架构，以完美平衡交易性能与资产安全：
+## 七、技术架构
+Entropy Zero 采用 **链下执行 + 链上安全** 的混合架构。设计目标非常明确：把高频、复杂、低价值密度的市场计算放在链下，把资产托管和最终安全保证放在链上。
 
-### 1. 链下 TEE 计算与验证
-核心的 AMM 撮合、概率查询、信息税计算和订单流均在链下可信执行环境（TEE）中运行。这保证了高频交互的零 Gas 成本与低延迟，同时所有的状态变更都可以生成密码学证明（Merkle Proof）供链上验证。
+### 1. 链下执行层
+`src/` 下的后端承担 mock TEE 运行时角色。
 
-### 2. 链上资金托管与安全
-EVM 智能合约（`evm/`）作为系统的最小信任锚点（Minimal Trust Anchor）。它仅负责最核心的资金托管、代币出入金和状态证明验证。链上金库保障了用户和 Agent 资产的绝对安全，而不拖累长尾市场的交易与查询速度。
+它负责：
+- 维护 `USDNB` 与 `ENTROPY` 的链下内部账本
+- 运行 AMM 定价与市场状态迁移
+- 处理创建市场、交易、加流动性、查询概率等核心流程
+- 用 `ENTROPY` 收取 Information Tax
+- 生成状态快照、Merkle Root 与可验证证明
 
-### 3. ERC-8004 Agent 规范接入
-系统原生支持 **ERC-8004** 标准，将 AI Agent 抽象为可验证的链上实体。Agent 可以进行资产质押、积累链上声誉，并作为独立的经济节点直接参与到 DAO 治理与市场结果的最终审核中。
+这一层解决的是“长尾市场必须高频运行，但不能每一步都上链”的问题。否则交易成本和响应延迟都会高到不可用。
+
+### 2. 链上安全层
+`evm/` 中的合约是整个系统的最小信任锚点。
+
+链上金库负责持有真实资产：
+- `USDNB`：用于充值、交易本金、结算和提现
+- `ENTROPY`：用于查询费资金、治理质押和功能型代币托管
+
+链上还负责：
+- 接收 operator 签名的状态根提交
+- 校验 operator 签名的提现消息
+- 在验证通过后释放真实资产
+
+也就是说：
+- 市场执行在链下
+- 资产托管在链上
+- 最终安全边界与状态承诺也在链上
+
+### 3. ERC-8004 Agent 治理层
+Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议中的一等经济参与者。
+
+基于 **ERC-8004 Agent 身份模型**，Agent 可以：
+- 将 Agent 身份绑定到控制账户
+- 质押 `ENTROPY` 获得治理资格
+- 参与 proposal review、投票与 veto
+- 根据治理行为被奖励或被 slash
+
+这点非常关键：Agent 不只是概率消费者，也是概率生产者、治理审核者和安全参与者。
+
+### 4. 端到端资金流
+完整流程如下：
+1. 用户或 Agent 将 `USDNB` / `ENTROPY` 存入链上金库。
+2. operator 在链下账本中记入对应余额。
+3. 交易、做市、命题和概率查询在链下执行层完成。
+4. 概率查询消耗 `ENTROPY`，形成 Information Tax。
+5. 后端周期性发布签名状态根。
+6. 用户提现时，金库基于签名提现消息释放链上资产。
+
+因此，Entropy Zero 的系统边界非常清晰：
+- 链下负责计算、撮合与高频市场交互
+- 链上负责托管、签名验证与最终安全保证
 
 ### 启动说明
 ```bash
