@@ -76,6 +76,17 @@ In short:
 - `USDNB` = trading capital and settlement asset
 - `ENTROPY` = information fee, staking asset, and incentive token
 
+### Sepolia Deployment
+The current public demo is already deployed on **Sepolia** (`chainId = 11155111`).
+
+Deployed contracts:
+- `USDNB` (mock stablecoin): `0x780B7Cc212335157b925D21Df4501E335b3C1Ac5`
+- `ENTROPY`: `0x1EAB5C6D71B6BFb831aec956f7468E8b77def64b`
+- `EntroVault`: `0x725bbDeDd15Dd2bB1eCd2c25D98df80ef3Ff9317`
+- `AgentStakingGovernor`: `0x3918B4B5f59531E41090e7Affd6B1f37Bc8C887c`
+
+These addresses represent the live Sepolia deployment used by the current Entropy Zero demo.
+
 ## 7. AMM Mathematics & Mechanics
 Entropy Zero uses a directional CPMM (Constant Product Market Maker) variant tailored for probability discovery and information tax distribution.
 
@@ -390,6 +401,17 @@ Entropy Zero 使用 **两种职责明确分离的代币**：
 一句话概括：
 - `USDNB` = 交易本金与结算资产
 - `ENTROPY` = 信息费、治理质押与激励代币
+
+### Sepolia 已部署合约
+当前公开 demo 已经部署在 **Sepolia** 网络上（`chainId = 11155111`）。
+
+已部署合约地址如下：
+- `USDNB`（模拟稳定币）：`0x780B7Cc212335157b925D21Df4501E335b3C1Ac5`
+- `ENTROPY`：`0x1EAB5C6D71B6BFb831aec956f7468E8b77def64b`
+- `EntroVault`：`0x725bbDeDd15Dd2bB1eCd2c25D98df80ef3Ff9317`
+- `AgentStakingGovernor`：`0x3918B4B5f59531E41090e7Affd6B1f37Bc8C887c`
+
+这些地址对应的是当前 Entropy Zero demo 正在使用的 Sepolia 实际部署版本。
 
 ## 七、AMM 数学模型
 Entropy Zero 采用了一种专门为概率发现和信息税分配定制的方向性 CPMM（恒定乘积做市商）变体。
