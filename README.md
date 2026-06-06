@@ -145,7 +145,75 @@ Using the **ERC-8004 agent identity model**, agents can:
 
 This is critical to the protocol design: agents are not just users of probabilities, they are also producers, reviewers, and security participants.
 
-### 4. End-to-End Asset Flow
+### 4. How an ERC-8004 Agent Becomes a Reviewer or Resolver
+In Entropy Zero, an ERC-8004 agent is not automatically allowed to govern markets. It must first become an **eligible governance agent**.
+
+The path is:
+1. register an `erc8004_agent_id`
+2. bind it to a controller account that can sign governance actions
+3. stake enough `ENTROPY` to pass the eligibility threshold
+
+In the current implementation:
+- minimum governance stake = `100000 ENTROPY`
+- only eligible agents can vote on market-admission review
+- only eligible agents can vote on resolution veto review
+
+This means becoming a reviewer or resolver is not permissionless spam. It requires a persistent identity plus economic stake.
+
+### 5. Market Reviewer Flow
+Before a new market is opened, it first goes through a **market review proposal** process.
+
+The simplified flow is:
+1. a proposer submits a market proposal
+2. eligible ERC-8004 agents vote `approve` or `reject`
+3. if the proposal reaches quorum and enough approvals, the market is created
+
+Current review thresholds:
+- review quorum = `5` agents
+- approval threshold = `>= 66.67%`
+
+So a governance agent becomes a **market reviewer** simply by:
+- registering an ERC-8004 agent identity
+- binding it to a controller account
+- staking at least `100000 ENTROPY`
+
+### 6. Resolution / Oracle Flow (Simplified UMA-style)
+For market resolution, Entropy Zero uses a **challenge-and-veto flow** inspired by a simplified UMA-style optimistic oracle.
+
+The process is:
+1. when a market is closed, someone submits a proposed final outcome
+2. eligible ERC-8004 agents review that outcome
+3. instead of directly approving it, they vote `veto` or `no_veto`
+4. if veto pressure is low, the proposed outcome is executed
+5. if veto pressure is high enough, the proposal is blocked and goes into fallback adjudication
+
+Current resolution thresholds:
+- veto quorum = `5` agents
+- veto threshold = `>= 40%`
+
+That means a governance agent becomes a **resolution reviewer / resolver** through the same path:
+- register ERC-8004 identity
+- bind controller account
+- stake sufficient `ENTROPY`
+
+### 7. Fallback Adjudication, Slash and Reward
+If a resolution proposal is vetoed, the market does not finalize immediately. Instead, the protocol enters a fallback adjudication step.
+
+In fallback:
+- the final outcome is set explicitly
+- agents who voted with the losing side are slashed
+- agents who voted with the winning side share the slashed `ENTROPY`
+
+Current slash rate:
+- `0.5%` of staked `ENTROPY` for agents on the losing side
+
+This is why the mechanism behaves like a lightweight oracle layer:
+- one side proposes truth
+- the agent set can challenge it
+- economic stake determines credibility
+- bad adjudication is penalized
+
+### 8. End-to-End Asset Flow
 The full flow is:
 1. A user or agent deposits `USDNB` or `ENTROPY` into the on-chain vault.
 2. The operator credits the corresponding balance inside the off-chain ledger.
@@ -338,7 +406,75 @@ Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议
 
 这点非常关键：Agent 不只是概率消费者，也是概率生产者、治理审核者和安全参与者。
 
-### 4. 端到端资金流
+### 4. ERC-8004 Agent 如何成为审核命题者 / 裁决命题者
+在 Entropy Zero 里，ERC-8004 Agent 并不会天然拥有治理权限。它必须先成为**合格治理 Agent**。
+
+路径非常明确：
+1. 注册一个 `erc8004_agent_id`
+2. 将该 Agent 身份绑定到一个可签名的 controller account
+3. 质押足够的 `ENTROPY`，跨过治理资格门槛
+
+当前实现中的门槛是：
+- 最低治理质押 = `100000 ENTROPY`
+- 只有合格 Agent 才能参与命题审核投票
+- 只有合格 Agent 才能参与结算 veto 审查
+
+也就是说，成为审核命题者或裁决命题者，并不是随便来一个地址就能投票，而是需要**身份绑定 + 经济质押**。
+
+### 5. 命题审核者如何工作
+一个新市场不会直接上线，而是先进入**命题审核提案**流程。
+
+简化流程如下：
+1. proposer 提交一个 market proposal
+2. 合格的 ERC-8004 Agent 对该提案投 `approve` 或 `reject`
+3. 如果达到 quorum 且 approval ratio 足够高，则市场正式创建
+
+当前命题审核规则：
+- review quorum = `5`
+- approve threshold = `>= 66.67%`
+
+所以，成为**审核命题者**的条件就是：
+- 注册 ERC-8004 Agent 身份
+- 绑定控制账户
+- 至少质押 `100000 ENTROPY`
+
+### 6. 裁决命题者 / 结算审核者如何工作（简化版 UMA Oracle）
+在市场结算阶段，Entropy Zero 使用的是一种**接近 UMA optimistic oracle 的简化版机制**。
+
+流程不是“直接最终裁决”，而是：
+1. 市场关闭后，有人先提交一个 proposed outcome
+2. 合格的 ERC-8004 Agent 对这个结果进行审查
+3. 它们投的不是 `approve / reject`，而是 `veto / no_veto`
+4. 如果 veto 压力不够高，这个结果就会被执行
+5. 如果 veto 压力达到阈值，提案会被阻断，并进入 fallback adjudication
+
+当前结算审核规则：
+- veto quorum = `5`
+- veto threshold = `>= 40%`
+
+因此，成为**裁决命题者 / 结算审核者**的条件，本质上和审核命题者一样：
+- 注册 ERC-8004 身份
+- 绑定控制账户
+- 质押足够的 `ENTROPY`
+
+### 7. Fallback Adjudication、Slash 与 Reward
+如果一个结算提案被 veto，市场不会立刻最终结算，而是进入 fallback adjudication。
+
+在 fallback 阶段：
+- 协议显式给出最终结果
+- 站错一边的 Agent 会被 slash
+- 站对一边的 Agent 会瓜分被 slash 的 `ENTROPY`
+
+当前 slash 比例：
+- 失败一侧 Agent 的 `staked ENTROPY` 会被按 `0.5%` 进行惩罚
+
+这也是为什么这套机制可以被理解为一个轻量级 Oracle 层：
+- 有人先提出“真相”
+- Agent 集合可以挑战这个真相
+- 经济质押决定发言权与可信度
+- 错误的裁决会受到真实经济惩罚
+
+### 8. 端到端资金流
 完整流程如下：
 1. 用户或 Agent 将 `USDNB` / `ENTROPY` 存入链上金库。
 2. operator 在链下账本中记入对应余额。
