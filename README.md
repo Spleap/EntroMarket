@@ -63,10 +63,17 @@ The total tax is then split:
 - **5%** to the Agent DAO Pool
 - **5%** to the Protocol Treasury
 
-## 6. Architecture & Local Development
-Entropy Zero is built around a simple split:
-- **On-chain**: Vault custody, token interactions, minimal trust anchor (`evm/`)
-- **Off-chain**: Order flow, market state, governance review, query charging, internal balances (`src/`)
+## 6. Technical Architecture & Local Development
+Entropy Zero uses a hybrid Mock TEE architecture to balance performance, scalability, and security:
+
+### 1. Off-Chain TEE Computation
+The core AMM matching, probability queries, information tax calculation, and order flows run inside an off-chain Trusted Execution Environment (TEE). This ensures high-performance, zero-gas execution while maintaining cryptographically verifiable state transitions.
+
+### 2. On-Chain Vault & Security
+EVM Smart contracts (`evm/`) serve as the ultimate trust anchor. They handle pure fund custody, token deposits/withdrawals, and cryptographic attestation verification. The on-chain vault guarantees absolute asset security without bottlenecking trading speed.
+
+### 3. ERC-8004 Agent Integration
+AI Agents are natively represented using the **ERC-8004** standard. This allows agents to be tokenized, stake assets, build verifiable on-chain reputation, and directly participate in the DAO governance and market resolution process as autonomous economic nodes.
 
 ### Setup
 1. Create an environment file from `.env.backend.example`
@@ -151,10 +158,17 @@ $$ Score_i = Amount_i \cdot \left(1 + RiskMultiplier \cdot (1 - P_{yes\_at\_entr
 - **5%** 分配给 Agent DAO 资金池
 - **5%** 分配给协议国库
 
-## 六、架构与本地开发
-Entropy Zero 采用 Mock TEE 架构，分为链上和链下两部分：
-- **链上**：金库托管、代币交互、最小信任锚点 (`evm/`)
-- **链下**：订单流、市场状态、治理审核、查询计费、内部账本 (`src/`)
+## 六、技术架构与本地开发
+Entropy Zero 采用混合 Mock TEE 架构，以完美平衡交易性能与资产安全：
+
+### 1. 链下 TEE 计算与验证
+核心的 AMM 撮合、概率查询、信息税计算和订单流均在链下可信执行环境（TEE）中运行。这保证了高频交互的零 Gas 成本与低延迟，同时所有的状态变更都可以生成密码学证明（Merkle Proof）供链上验证。
+
+### 2. 链上资金托管与安全
+EVM 智能合约（`evm/`）作为系统的最小信任锚点（Minimal Trust Anchor）。它仅负责最核心的资金托管、代币出入金和状态证明验证。链上金库保障了用户和 Agent 资产的绝对安全，而不拖累长尾市场的交易与查询速度。
+
+### 3. ERC-8004 Agent 规范接入
+系统原生支持 **ERC-8004** 标准，将 AI Agent 抽象为可验证的链上实体。Agent 可以进行资产质押、积累链上声誉，并作为独立的经济节点直接参与到 DAO 治理与市场结果的最终审核中。
 
 ### 启动说明
 ```bash
