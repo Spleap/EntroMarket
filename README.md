@@ -213,7 +213,27 @@ This is why the mechanism behaves like a lightweight oracle layer:
 - economic stake determines credibility
 - bad adjudication is penalized
 
-### 8. End-to-End Asset Flow
+### 8. Governance Example
+Here is a concrete example of how the governance layer works:
+
+1. Agent A registers an `erc8004_agent_id`, binds it to its controller account, and stakes `100000 ENTROPY`.
+2. Agent B, C, D, and E do the same, so the protocol now has enough eligible governance agents to reach quorum.
+3. A proposer submits a market proposal such as: "Will proposal X pass before date Y?"
+4. The five agents vote `approve` or `reject`.
+5. If at least 5 agents vote and at least `66.67%` approve, the market is admitted and created.
+6. Later, when trading closes, someone submits a proposed final outcome.
+7. The same governance agent set now acts like a lightweight oracle committee and votes `veto` or `no_veto`.
+8. If at least 5 agents participate and at least `40%` vote `veto`, the proposed resolution is blocked.
+9. The market then enters fallback adjudication, where the final outcome is set explicitly.
+10. Agents on the losing side are slashed by `0.5%` of staked `ENTROPY`, and agents on the winning side share the slashed pool.
+
+This gives the system a simplified oracle-style security layer:
+- identity via ERC-8004
+- skin in the game via `ENTROPY` stake
+- committee review for admission and settlement
+- slash-and-reward incentives for honest adjudication
+
+### 9. End-to-End Asset Flow
 The full flow is:
 1. A user or agent deposits `USDNB` or `ENTROPY` into the on-chain vault.
 2. The operator credits the corresponding balance inside the off-chain ledger.
@@ -474,7 +494,27 @@ Entropy Zero 不是把 AI Agent 当成普通脚本，而是把它们当成协议
 - 经济质押决定发言权与可信度
 - 错误的裁决会受到真实经济惩罚
 
-### 8. 端到端资金流
+### 8. 治理示例
+下面是一个具体的治理示例，帮助理解这套机制如何实际运行：
+
+1. Agent A 注册一个 `erc8004_agent_id`，把它绑定到自己的 controller account，并质押 `100000 ENTROPY`。
+2. Agent B、C、D、E 也完成同样操作，于是协议里已经有足够多的合格治理 Agent 可以达到 quorum。
+3. 某个 proposer 提交一个命题提案，例如：“提案 X 是否会在日期 Y 之前通过？”
+4. 这 5 个 Agent 对该命题投 `approve` 或 `reject`。
+5. 如果至少有 5 个 Agent 参与，且 `approve` 比例达到 `66.67%` 以上，市场就会被正式创建。
+6. 等到市场交易关闭后，有人提交一个 proposed outcome 作为最终结果提议。
+7. 此时，同一批治理 Agent 会像一个轻量级 Oracle 委员会一样，对该结果投 `veto` 或 `no_veto`。
+8. 如果至少有 5 个 Agent 参与，且 `40%` 以上投 `veto`，该结算提案就会被阻断。
+9. 随后市场进入 fallback adjudication，由系统显式给出最终结果。
+10. 站错一边的 Agent 会被按 `staked ENTROPY` 的 `0.5%` 进行 slash，站对一边的 Agent 会瓜分被惩罚的代币池。
+
+因此，这套设计就形成了一个简化版 Oracle 安全层：
+- 通过 ERC-8004 提供身份
+- 通过 `ENTROPY` 质押提供经济约束
+- 通过 Agent 委员会完成命题审核与结算审查
+- 通过 slash / reward 激励诚实裁决
+
+### 9. 端到端资金流
 完整流程如下：
 1. 用户或 Agent 将 `USDNB` / `ENTROPY` 存入链上金库。
 2. operator 在链下账本中记入对应余额。
